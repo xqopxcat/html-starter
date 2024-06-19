@@ -12,12 +12,12 @@
       <form class="form-area" autocomplete="off" onsubmit="onSubmit(e)" novalidate>
         <h2 class="form-title lang" tag="validate-code">Validation Code</h2>
         <p class="form-control" style="display: flex; justify-content: space-between; ">
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')" required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
+            <input name='code' class='code-input' maxlength="1" tabindex="-1" oninput="this.value=this.value.replace(/[^0-9]/g, '')" required/>
+            <input name='code' class='code-input' maxlength="1" tabindex="-1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
+            <input name='code' class='code-input' maxlength="1" tabindex="-1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
+            <input name='code' class='code-input' maxlength="1" tabindex="-1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
+            <input name='code' class='code-input' maxlength="1" tabindex="-1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
+            <input name='code' class='code-input' maxlength="1" tabindex="-1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
         </p>
         <p class="btn-area">
             <button type="submit" id="form-submit" disabled class="btn-main lang" tag="verify">Verify</button>
@@ -25,7 +25,7 @@
     </form>
         <p id="counterArea" class="count-area hide">
             <span class="lang" tag="code-resend-prefix">Resend after </span>
-            <span class="" id="count">30</span>
+            <span class="" id="count">300</span>
             <span class="lang" tag="code-resend-suffix"> seconds.</span>
         </p>
       <form id="re-send-link" class="hide" action="#" method="post">
