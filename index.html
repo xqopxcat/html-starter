@@ -142,11 +142,9 @@
         inputElements[0].addEventListener('paste', handlePaste);
         
         inputElements.forEach(input => {
-            // input.addEventListener('focus', e => {
-            //     setTimeout(() => {
-            //         e.target.select()
-            //     }, 0)
-            // })
+            input.addEventListener('focus', e => {
+                e.target.select()
+            });
             
             input.addEventListener('keydown', e => {
                 switch(e.keyCode) {
