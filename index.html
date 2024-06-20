@@ -142,10 +142,6 @@
         inputElements[0].addEventListener('paste', handlePaste);
         
         inputElements.forEach(input => {
-            input.addEventListener('focus', e => {
-                e.target.select()
-            });
-            
             input.addEventListener('keydown', e => {
                 switch(e.keyCode) {
                 case KEYBOARDS.backspace:
