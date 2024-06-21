@@ -12,12 +12,12 @@
       <form class="form-area" autocomplete="off" onsubmit="onSubmit(e)" novalidate>
         <h2 class="form-title lang" tag="validate-code">Validation Code</h2>
         <p class="form-control" style="display: flex; justify-content: space-between; ">
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')" required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
-            <input name='code' class='code-input' maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g, '')"  required/>
+            <input name='code' class='code-input' maxlength="1" required/>
+            <input name='code' class='code-input' maxlength="1" required/>
+            <input name='code' class='code-input' maxlength="1" required/>
+            <input name='code' class='code-input' maxlength="1" required/>
+            <input name='code' class='code-input' maxlength="1" required/>
+            <input name='code' class='code-input' maxlength="1" required/>
         </p>
         <p class="btn-area">
             <button type="submit" id="form-submit" disabled class="btn-main lang" tag="verify">Verify</button>
@@ -85,11 +85,16 @@
         
         const handleInput = e => {
             const input = e.target;
+            const value = input.value;
+            if (value.length && /[^0-9]/.test(value)) {
+                input.value = value.replace(/[^0-9]/g, '');
+            }
             const nextInput = input.nextElementSibling;
             const code = [...inputElements].map((input) => input.value).join('');
             submitButton.disabled = code.length !== 6;
             if (nextInput && input.value) {
                 nextInput.focus();
+                e.preventDefault();
             }
         };
         
@@ -127,30 +132,41 @@
           resendButton.disabled = true;
         });
         
-        form.addEventListener('input', handleInput);
+        const handleInputFocus = (e) => {
+            const value = e.target.value;
+            e.preventDefault();
+            if (value.length) {
+                e.target.select();
+            }
+        };
+        
+        const handleInputKeydown = (e) => {
+            switch(e.keyCode) {
+            case KEYBOARDS.backspace:
+                handleBackspace(e)
+                break
+            case KEYBOARDS.arrowLeft:
+                handleArrowLeft(e)
+                break
+            case KEYBOARDS.arrowRight:
+                handleArrowRight(e)
+                break
+            default:  
+            }
+            
+            
+        };
+        
         
         inputElements.forEach(el =>{
-            el.addEventListener('focus', (e) => {
-                const value = e.target.value;
-                if (value.length) {
-                    e.target.select();
-                }
-            });
+            el.removeEventListener('input', handleInput);
+            el.addEventListener('input', handleInput);
             
-            el.addEventListener('keydown', (e) => {
-                switch(e.keyCode) {
-                case KEYBOARDS.backspace:
-                    handleBackspace(e)
-                    break
-                case KEYBOARDS.arrowLeft:
-                    handleArrowLeft(e)
-                    break
-                case KEYBOARDS.arrowRight:
-                    handleArrowRight(e)
-                    break
-                default:  
-                }
-            });
+            el.removeEventListener('focus', handleInputFocus);
+            el.addEventListener('focus', handleInputFocus);
+            
+            el.removeEventListener('keydown', handleInputKeydown);
+            el.addEventListener('keydown', handleInputKeydown);
 
         });
         
