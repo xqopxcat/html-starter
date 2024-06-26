@@ -8,9 +8,14 @@
 </head>
 <body>
 	<div class="main login two-factor">	
+		<h1 class="system">DOCUMENT VERIFICATION SYSTEM</h1>
     <div class="form">
       <form class="form-area" autocomplete="off" onsubmit="onSubmit(e)" novalidate>
         <h2 class="form-title lang" tag="validate-code">Validation Code</h2>
+        <p class="desp">
+            <span class="lang" tag="validate-send-to">Validation email already send to:</span>  
+            <span class="strong">ohmygod@gogoro.com</span>
+        </p>
         <p class="form-control" style="display: flex; justify-content: space-between; ">
             <input name='code' class='code-input' maxlength="1" required/>
             <input name='code' class='code-input' maxlength="1" required/>
@@ -19,6 +24,9 @@
             <input name='code' class='code-input' maxlength="1" required/>
             <input name='code' class='code-input' maxlength="1" required/>
         </p>
+        <p class="error lang" tag="validate-error-wrong">Invalid code. Please try again!</p>
+        <p class="error lang" tag="validate-error-invalid">The code has expired. Please request a new one!</p>
+        <p class="error lang" tag="validate-error-toomany">Too many invalid codes have been entered. Please click “Resend Validation Code” below and try again!</p>
         <p class="btn-area">
             <button type="submit" id="form-submit" disabled class="btn-main lang" tag="verify">Verify</button>
         </p>
@@ -33,6 +41,7 @@
       </form>
     </div>
 	</div>
+    <script type="text/javascript" src="/assets/lang.js"></script>
     <script>
         const counterDiv = document.getElementById("counterArea");
         const countDiv = document.getElementById("count");
@@ -82,8 +91,10 @@
             arrowLeft: 37,
             arrowRight: 39,
         };
-        
+        let isLocking = false;
         const handleInput = e => {
+            if (isLocking) return;
+         
             const input = e.target;
             const value = input.value;
             if (value.length && /[^0-9]/.test(value)) {
@@ -92,10 +103,22 @@
             const nextInput = input.nextElementSibling;
             const code = [...inputElements].map((input) => input.value).join('');
             submitButton.disabled = code.length !== 6;
-            if (nextInput && input.value) {
+          
+            if (nextInput && input.value.length) {
                 nextInput.focus();
                 e.preventDefault();
             }
+        };
+        
+        const handlePaste = e => {
+            e.preventDefault();
+            const paste = e.clipboardData.getData('text/plain');
+            if (!isNaN(Number(paste))) {
+                inputElements.forEach((el, i) => {
+                    el.value = paste[i] || '';
+                });
+            }
+            
         };
         
         const handleBackspace = e => {
@@ -134,8 +157,8 @@
         
         const handleInputFocus = (e) => {
             const value = e.target.value;
-            e.preventDefault();
             if (value.length) {
+                e.preventDefault();
                 e.target.select();
             }
         };
@@ -156,7 +179,14 @@
             
             
         };
-        
+        const start = () => {
+            isLocking = true;
+        };
+        const end = (e) => {
+            isLocking = false;
+            handleInput(e);
+        };
+
         
         inputElements.forEach(el =>{
             el.removeEventListener('input', handleInput);
@@ -167,6 +197,12 @@
             
             el.removeEventListener('keydown', handleInputKeydown);
             el.addEventListener('keydown', handleInputKeydown);
+          
+            el.addEventListener('compositionstart', start);
+            el.addEventListener('compositionend', end);
+            
+            el.removeEventListener('paste', handlePaste);
+            el.addEventListener('paste', handlePaste);
 
         });
         
